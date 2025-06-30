@@ -2,14 +2,24 @@ import { useState } from "react"
 function Todo()
 {
     const [Task,setTask] = useState(["Eat breakfast","Do homework","Play games"]);
-    const [newTask,setNewTask] = useState(" ");
+    const [newTask,setNewTask] = useState(" ");//for handleInputChange
 
     //when type something in text box show it realtime
     function handleInputChange(event){
       setNewTask(event.target.value)  
     }
     function addTask(){
-     
+       if(newTask.trim() !== "") //trim() remove any white space
+       {
+              setTask(Task => [...Task,newTask]);// ...Task This uses the spread operator to copy all existing tasks in the current list.
+       //Why do we need to “copy all tasks” when adding a new task?
+          //State (Task) should never be modified directly.
+          //Instead, you create a new array based on the old one plus your new item, then update the state with it.
+       setNewTask("");//clear after add
+       }
+       else{
+          alert('Can not be enter blanck..!');
+       }
     }
     function deleteTask(Index){
 
