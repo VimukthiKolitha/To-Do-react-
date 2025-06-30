@@ -22,7 +22,15 @@ function Todo()
        }
     }
     function deleteTask(Index){
-
+       const updatedTask = Task.filter((event,index) => index !== Index);
+       /* .filter() is an array method that:
+            1. Loops through each element
+             2 .Provides the element and its index.
+             3.Returns a new array with only the elements where the condition is tru 
+               index = filter function index
+               Index = parmeter
+             */
+       setTask(updatedTask);
     }
     function moveUpTask(Index){
 
