@@ -1,0 +1,49 @@
+import { useState } from "react"
+function Todo()
+{
+    const [Task,setTask] = useState(["Eat breakfast","Do homework","Play games"]);
+    const [newTask,setNewTask] = useState(" ");
+
+    //when type something in text box show it realtime
+    function handleInputChange(event){
+      setNewTask(event.target.value)  
+    }
+    function addTask(){
+     
+    }
+    function deleteTask(Index){
+
+    }
+    function moveUpTask(Index){
+
+    }
+    function moveDowmTask(Index){
+        
+    }
+
+    return(
+        <div>
+            <h1>TO-DO App</h1>
+            <input type="text" placeholder="Enter task..." value={newTask} onChange={handleInputChange}/>
+            <button onClick={addTask}>ADD</button>
+
+            <div>
+              {/* .map() loops over each item in the Task array.*/}  
+               {Task.map((task,Index) =>
+                  <li key={Index}>
+                    <span>{task}</span>
+                    <button onClick={()=> deleteTask(Index)}>DELETE</button>
+                    <button onClick={() =>moveUpTask(Index)}>👆</button>
+                    <button onClick={() =>moveDowmTask(Index)}>👇</button>
+                    {/* Here, deleteTask is a function reference.this is not call immediately this work only when you click button*/}
+                    {/*onClick = {deleteTask(Index)}  this is immediate.its work even without clicking button.here we are calling to function not function refference*/}
+                    {/* onClick={() =>moveDowmTask(Index)}  using arrow function we can easily prevent problem */}
+                  </li>
+                )}
+
+             
+            </div>
+        </div>
+    )
+}
+export default Todo
