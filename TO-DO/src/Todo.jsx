@@ -1,8 +1,8 @@
 import { useState } from "react"
 function Todo()
 {
-    const [Task,setTask] = useState(["Eat breakfast","Do homework","Play games"]);
-    const [newTask,setNewTask] = useState(" ");//for handleInputChange
+    const [Task,setTask] = useState([]);
+    const [newTask,setNewTask] = useState("");//for handleInputChange
 
     //when type something in text box show it realtime
     function handleInputChange(event){
@@ -33,10 +33,21 @@ function Todo()
        setTask(updatedTask);
     }
     function moveUpTask(Index){
-
+      
+      if(Index > 0)
+      {
+         const updatedTask = [...Task];//get all task 
+         [updatedTask[Index],updatedTask[Index - 1]] = [updatedTask[Index - 1],updatedTask[Index]];
+         setTask(updatedTask);
+      }
     }
     function moveDowmTask(Index){
-        
+        if(Index < Task.length - 1)
+        {
+          const updatedtask = [...Task];
+          [updatedtask[Index],updatedtask[Index + 1]] = [updatedtask[Index + 1],updatedtask[Index]];
+          setTask(updatedtask)
+        }
     }
 
     return(
