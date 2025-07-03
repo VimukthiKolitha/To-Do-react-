@@ -1,4 +1,5 @@
 import { useState } from "react"
+import Navigation from "./Navigation";
 function Todo()
 {
     const [Task,setTask] = useState([]);
@@ -52,6 +53,7 @@ function Todo()
 
     return(
         <div>
+          <Navigation/>
             <h1>TO-DO App</h1>
             <input type="text" placeholder="Enter task..." value={newTask} onChange={handleInputChange}/>
             <button onClick={addTask}>ADD</button>
