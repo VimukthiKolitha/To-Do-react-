@@ -1,12 +1,11 @@
 import { useState } from "react"
 import {useNavigate} from 'react-Router-dom'
 import Navigation from "./Navigation";
+import axios from 'axios'
 function Login() {
 
     const [typeEmail,setTypeEmail] = useState("");
     const [typePass,setTypePass] = useState("");
-    const [Email,setEmail] = useState(["vimukthi@gmail.com"]);
-    const [Pass,setPass] = useState(["1234"]);
     const [isLogin,setIsLogin] = useState(true);
     const navigate = useNavigate();
 
@@ -16,30 +15,29 @@ function Login() {
     function onTypePass(event){
         setTypePass(event.target.value)
     }
-    function Login(){
-        // Check if email exists in Email array
-       const valEmail = Email.includes(typeEmail);
-
-        // Check if password exists in Pass array
-       const valPass = Pass.includes(typePass);
-
-       if(valEmail && valPass)
-       {
-         alert('login sucess...!');
+     async function Login(){
+      try {
+        const response = await axios.post('http://localhost:4000/Login',{Email:typeEmail,Password:typePass})
+        alert(response.data.message);
+         setTypeEmail('');
+         setTypePass('');
          navigate('/Todo');
-       }
-       else{
-        alert('Check email again');
-       }
-
+      } catch (error) {
+         alert(error.response.data.error);
+      }
     }
 
-    function createAccount(){
-    setEmail ([...Email,typeEmail]);
-    setPass ([...Pass,typePass]);
-    alert('success...!')
-    setTypeEmail("");
-    setTypePass("");
+   async function createAccount(){
+       try {
+        const response = await axios.post('http://localhost:4000/createAccount',{Email:typeEmail,Password: typePass})
+        alert(response.data.message);
+        setTypeEmail('');
+        setTypePass('');
+        setIsLogin(true)
+
+       } catch (error) {
+         alert(error.response.data.error);
+       }
     }
 
     return(
