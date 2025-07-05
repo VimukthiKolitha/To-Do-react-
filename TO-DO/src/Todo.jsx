@@ -1,26 +1,44 @@
 import { useState } from "react"
 import Navigation from "./Navigation";
+import axios from "axios";
+import { useEffect } from "react";
+
 function Todo()
 {
     const [Task,setTask] = useState([]);
     const [newTask,setNewTask] = useState("");//for handleInputChange
+    useEffect(()=>{
+     Display();
+    },[]);
+
 
     //when type something in text box show it realtime
     function handleInputChange(event){
       setNewTask(event.target.value)  
     }
-    function addTask(){
-       if(newTask.trim() !== "") //trim() remove any white space
+    async function addTask(){
+       try {
+        if(newTask.trim() !== "") //trim() remove any white space
        {
-              setTask(Task => [...Task,newTask]);// ...Task This uses the spread operator to copy all existing tasks in the current list.
-       //Why do we need to “copy all tasks” when adding a new task?
-          //State (Task) should never be modified directly.
-          //Instead, you create a new array based on the old one plus your new item, then update the state with it.
-       setNewTask("");//clear after add
+         const responce = await axios.post('http://localhost:4000/Task',{Todo:newTask});
+         setNewTask("");
+         alert(responce.data.message);
        }
        else{
-          alert('Can not be enter blanck..!');
        }
+       } catch (error) {
+         alert(error.responce.data.error);
+       }
+    }
+    async function Display()
+    {
+       try {
+        const responce = await axios.get('http://localhost:4000/display');
+        setTask(responce.data.list);
+       } catch (error) {
+        alert(error.responce.data.error);
+       }
+
     }
     function deleteTask(Index){
        const updatedTask = Task.filter((event,index) => index !== Index);
@@ -62,7 +80,7 @@ function Todo()
               {/* .map() loops over each item in the Task array.*/}  
                {Task.map((task,Index) =>
                   <li key={Index}>
-                    <span>{task}</span>
+                    <span>{task.Todo}</span>{/*This accesses the Todo field inside your MongoDB document.*/}
                     <button onClick={()=> deleteTask(Index)}>DELETE</button>
                     <button onClick={() =>moveUpTask(Index)}>👆</button>
                     <button onClick={() =>moveDowmTask(Index)}>👇</button>
