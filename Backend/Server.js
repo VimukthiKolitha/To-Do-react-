@@ -3,7 +3,7 @@ import cors from 'cors'
 import mongoose from 'mongoose'
 import dotEnv from 'dotenv'
 import Users from './Module/Users.js'
-
+import Tasks from './Module/Tasks.js'
 dotEnv.config()
 const App = express();
 
@@ -74,4 +74,31 @@ App.post('/Login',async (req,res)=>{
     res.status(500).json({error:'something went wrong'})
   }
 
+})
+
+
+//Add task
+
+App.post('/Task',async(req,res) =>{
+     const {Todo} = req.body;
+  try {
+      const newTask = new Tasks({Todo});
+      await newTask.save();
+
+      res.status(200).json({message:'Task added success..!'})
+  } catch (error) {
+     res.status(500).json({error:'something went wrong..!'})
+  }
+})
+
+//displsy task
+
+App.get('/display',async(req,res) =>{
+  try {
+      const list =  await Tasks.find()
+
+      res.status(200).json({list});
+  } catch (error) {
+     res.status(500).json({error:'something went wrong..!'})
+  }
 })
