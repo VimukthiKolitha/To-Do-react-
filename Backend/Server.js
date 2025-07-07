@@ -102,3 +102,16 @@ App.get('/display',async(req,res) =>{
      res.status(500).json({error:'something went wrong..!'})
   }
 })
+
+//delete task
+
+App.delete('/Task-delete/:id',async (req,res) =>{
+      const {id} = req.params;
+  try {
+      await Tasks.findByIdAndDelete(id)
+
+      res.status(200).json({message:"Delete successfull..!"})
+  } catch (error) {
+    res.status(500).json({error:'something went wrong'})
+  }
+})
