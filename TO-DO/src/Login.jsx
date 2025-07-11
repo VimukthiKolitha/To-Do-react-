@@ -1,7 +1,7 @@
 import { useState } from "react"
 import {useNavigate} from 'react-Router-dom'
-import Navigation from "./Navigation";
 import axios from 'axios'
+import './Login.css'
 function Login() {
 
     const [typeEmail,setTypeEmail] = useState("");
@@ -41,23 +41,23 @@ function Login() {
     }
 
     return(
-        <div>
-            <Navigation/>
+        <div className="container">
           { isLogin ?(
-            <div>
-            <h1>Login</h1>
-             <input type="email" value={typeEmail} placeholder="Entert Email" onChange={onTypeEmail}/><br/>
-             <input type="password" value={typePass} placeholder="Enter password" onChange={onTypePass}/><br/>
-             <button onClick={Login}>Login</button><br/>
-             <p>Don't have an account?<span  style={{ color: "blue", cursor: "pointer" }} onClick={()=> setIsLogin(false)}>Create account</span></p>
+            <div className="Form">
+            <h1 className="topic">Login</h1>
+            <div></div>
+             <input className="Input" type="email" value={typeEmail} placeholder="Entert Email" onChange={onTypeEmail}/><br/>
+             <input className="Input" type="password" value={typePass} placeholder="Enter password" onChange={onTypePass}/><br/>
+             <button onClick={Login} className="button">Login</button><br/>
+             <p className="Link">Don't have an account?<span  style={{ color: "blue", cursor: "pointer" }} onClick={()=> setIsLogin(false)}> Create account</span></p>
           </div>
         ) : ( 
-           <div>
-            <h1>Create account</h1>
-             <input type="email" value={typeEmail} placeholder="Entert Email" onChange={onTypeEmail}/><br/>
-             <input type="password" value={typePass} placeholder="Enter password" onChange={onTypePass}/><br/>
-             <button onClick={createAccount}>Create Account</button><br/>
-             <p>Already have an account?<span style={{ color: "blue", cursor: "pointer" }} onClick={()=> setIsLogin(true)}>Sign in</span></p>
+           <div className="Form">
+            <h1 className="topic">Create account</h1>
+             <input className="Input" type="email" value={typeEmail} placeholder="Entert Email" onChange={onTypeEmail}/><br/>
+             <input className="Input" type="password" value={typePass} placeholder="Enter password" onChange={onTypePass}/><br/>
+             <button onClick={createAccount} className="button">Create Account</button><br/>
+             <p className="Link">Already have an account?<span style={{ color: "blue", cursor: "pointer" }} onClick={()=> setIsLogin(true)}> Sign in</span></p>
           </div>
           )}
         </div>

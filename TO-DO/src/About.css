@@ -1,0 +1,43 @@
+.nav-about{
+   position: fixed;
+   top: 0px;
+   left: 0px;
+   width: 100%;
+}
+.about{
+    width: 150vh;
+    height: 40vh;
+    color: white;
+    padding: 10px;
+    /*1. 10s -Duration of one complete animation cycle (from start to finish) is 10 seconds.
+      2 .linear - The speed of the animation remains constant throughout the cycle
+      3. infinite -  The animation repeats forever without stopping.
+    */
+    animation: boxShadowAnimation 10s linear infinite;
+}
+
+h1{
+    color: white;
+}
+.description{
+    font-size: large;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+@keyframes boxShadowAnimation{
+    0%{
+        box-shadow: 0 0 20px white;
+    }
+    25%{
+        box-shadow: 0 0 20px orange;
+    }
+    50%{
+        box-shadow: 0 0 20px lime;
+    }
+    75%{
+        box-shadow: 0 0 20px cyan;
+    }
+    100%{
+        box-shadow: 0 0 20px red;
+    }
+}

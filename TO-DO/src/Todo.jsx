@@ -2,7 +2,7 @@ import { useState } from "react"
 import Navigation from "./Navigation";
 import axios from "axios";
 import { useEffect } from "react";
-
+import './Todo.css';
 function Todo()
 {
     const [Task,setTask] = useState([]);
@@ -69,27 +69,33 @@ function Todo()
 
     return(
         <div>
-          <Navigation/>
-            <h1>TO-DO App</h1>
-            <input type="text" placeholder="Enter task..." value={newTask} onChange={handleInputChange}/>
-            <button onClick={addTask}>ADD</button>
+         <div className="nav"> <Navigation/></div>
+         <div className="page-content">
+           <div>
+            <div className="fixed-input">
+                <input className="WriteTask" type="text" placeholder="Enter task..." value={newTask} onChange={handleInputChange}/>
+                <button className="add" onClick={addTask}>ADD</button>
+            </div>
+           
 
-            <div>
+            <div className="todo">
               {/* .map() loops over each item in the Task array.*/}  
                {Task.map((task,Index) =>
                   <li key={Index}>
-                    <span>{task.Todo}</span>{/*This accesses the Todo field inside your MongoDB document.*/}
-                    <button onClick={()=> deleteTask(task._id)}>DELETE</button>
-                    <button onClick={() =>moveUpTask(Index)}>👆</button>
-                    <button onClick={() =>moveDowmTask(Index)}>👇</button>
+                    <span className="display">{task.Todo}</span>{/*This accesses the Todo field inside your MongoDB document.*/}
+                    <button className="action-delete" onClick={()=> deleteTask(task._id)}>DELETE</button>
+                    <button className="action-up" onClick={() =>moveUpTask(Index)}>⬆️</button>
+                    <button className="action-down" onClick={() =>moveDowmTask(Index)}>⬇️</button>
                     {/* Here, deleteTask is a function reference.this is not call immediately this work only when you click button*/}
                     {/*onClick = {deleteTask(Index)}  this is immediate.its work even without clicking button.here we are calling to function not function refference*/}
                     {/* onClick={() =>moveDowmTask(Index)}  using arrow function we can easily prevent problem */}
                   </li>
                 )}
-
-             
             </div>
+           </div>
+           
+         </div>
+           
         </div>
     )
 }
