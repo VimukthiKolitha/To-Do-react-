@@ -20,9 +20,10 @@ function Todo()
        try {
         if(newTask.trim() !== "") //trim() remove any white space
        {
-         const responce = await axios.post('http://localhost:4000/Task',{Todo:newTask});
+         const responce = await axios.post('http://localhost:4000/Task',{work:newTask}); //work mean db schema
          setNewTask("");
          alert(responce.data.message);
+         Display();
        }
        else{
        }
@@ -66,6 +67,15 @@ function Todo()
           setTask(updatedtask)
         }
     }
+    async function ActionComplete(ID,newAction){
+      try {
+        const responce = await axios.post(`http://localhost:4000/Action/${ID}`,{action:newAction}) /*action mean Db schema */
+        alert(responce.data.message)
+        Display();
+      } catch (error) {
+        alert(error.responce.error)
+      }
+    }
 
     return(
         <div>
@@ -82,10 +92,18 @@ function Todo()
               {/* .map() loops over each item in the Task array.*/}  
                {Task.map((task,Index) =>
                   <li key={Index}>
-                    <span className="display">{task.Todo}</span>{/*This accesses the Todo field inside your MongoDB document.*/}
+                    <span className="display">{task.work}</span>{/*This accesses the Todo field inside your MongoDB document.*/}
                     <button className="action-delete" onClick={()=> deleteTask(task._id)}>DELETE</button>
                     <button className="action-up" onClick={() =>moveUpTask(Index)}>⬆️</button>
                     <button className="action-down" onClick={() =>moveDowmTask(Index)}>⬇️</button>
+                    <div>
+                      {task.action?(
+                       <button className="action-down" onClick={() =>ActionComplete(task._id,false)}>⛔ todo</button>
+                      ):(
+                       <button className="action-down" onClick={() =>ActionComplete(task._id,true)}>✅ done</button>
+                      )  
+                    }
+                    </div>
                     {/* Here, deleteTask is a function reference.this is not call immediately this work only when you click button*/}
                     {/*onClick = {deleteTask(Index)}  this is immediate.its work even without clicking button.here we are calling to function not function refference*/}
                     {/* onClick={() =>moveDowmTask(Index)}  using arrow function we can easily prevent problem */}
