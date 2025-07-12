@@ -80,9 +80,9 @@ App.post('/Login',async (req,res)=>{
 //Add task
 
 App.post('/Task',async(req,res) =>{
-     const {Todo} = req.body;
+     const {work} = req.body;
   try {
-      const newTask = new Tasks({Todo});
+      const newTask = new Tasks({work});
       await newTask.save();
 
       res.status(200).json({message:'Task added success..!'})
@@ -113,5 +113,17 @@ App.delete('/Task-delete/:id',async (req,res) =>{
       res.status(200).json({message:"Delete successfull..!"})
   } catch (error) {
     res.status(500).json({error:'something went wrong'})
+  }
+})
+
+App.post('/Action/:id',async (req,res) =>{
+  const {id} = req.params;
+  const {action} = req.body;
+  try {
+    await Tasks.findByIdAndUpdate(id ,{action})
+
+    res.status(200).json({message:"status changed..!"})
+  } catch (error) {
+    res.status(500).json({error:'mothing went wrong...!'})
   }
 })
