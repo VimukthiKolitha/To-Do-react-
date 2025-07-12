@@ -10,10 +10,12 @@
    margin-top: 0px;
    margin-right: 750px;
    margin-left: 10px;
+   animation: drop 1s ease-out forwards;
 }
 button{
     border-radius: 10px;
-     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    animation: drop 2s ease-out forwards;
 }
 .add{
     background-color: rgb(112, 255, 112);
@@ -95,4 +97,21 @@ li{
    position: fixed;
    top: 60px; 
    left: 0px;
+}
+
+@keyframes drop{
+    0%{
+        opacity: 0;
+        transform: translateY(-100px);
+    }
+    60%{
+        opacity: 1;
+        transform: translateY(60px);
+    }
+    80%{
+        transform: translateY(-10px);
+    }
+    100%{
+        transform: translateY(0);
+    }
 }
