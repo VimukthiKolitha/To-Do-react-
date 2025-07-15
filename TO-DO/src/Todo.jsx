@@ -103,8 +103,7 @@ function Todo()
 
     //search function
      async function search(event){
-       setSearch(event.target.value)
-       setSearch("");
+       setSearch(event.target.value);
     }
 
     //update function
