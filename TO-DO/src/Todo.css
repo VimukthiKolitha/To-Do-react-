@@ -25,6 +25,7 @@ button{
     color: black;
     font-size: large;
     cursor: pointer;
+    
 }
 .add:hover{
    background-color: white;
@@ -98,7 +99,47 @@ li{
    top: 60px; 
    left: 0px;
 }
-
+.searchbar{
+    position: absolute;
+    right: 30px;
+    top: 60px;
+    width: 300px;
+    height: 20px;
+}
+.deleteico{
+    height: 20px;
+    width: 20px;
+}
+.editbtnicon{
+    height: 20px;
+    width: 20px;
+}
+.editbtn{
+  margin-bottom: 10px;
+  width: 80px;
+  height: 30px;
+  background-color: yellow;
+ 
+}
+.form{
+    border-radius: 10px;
+    animation: form 5s linear infinite;
+    padding: 20px;
+    display: flex;           
+    flex-direction:column;   /* ADD to stack children vertically */
+    align-items: center;      /* Center input and button horizontally */
+    gap: 10px;        
+}
+.save{
+    border-radius: 5px;
+    background-color: lime;
+    width: 200px;
+    height: 40px;
+}
+.save:hover{
+    background-color: white;
+    transform: translateY(4px);
+}
 @keyframes drop{
     0%{
         opacity: 0;
@@ -113,5 +154,23 @@ li{
     }
     100%{
         transform: translateY(0);
+    }
+}
+@keyframes form{
+    0%{
+       box-shadow: 0 0  20px red;
+       
+    }
+    25%{
+       box-shadow: 0 0 20px orange;
+    }
+    50%{
+        box-shadow: 0 0   20px cyan;
+    }
+    75%{
+        box-shadow: 0 0  20px lime;
+    }
+    100%{
+        box-shadow: 0 0  20px red;
     }
 }

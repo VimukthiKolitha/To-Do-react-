@@ -1,12 +1,24 @@
-import { useState } from "react"
+import { useState } from "react";
 import Navigation from "./Navigation";
 import axios from "axios";
 import { useEffect } from "react";
+import deleteico from "./assets/delete.png";
+import edit from "./assets/edit.png";
 import './Todo.css';
+
+
 function Todo()
 {
+  //use states
     const [Task,setTask] = useState([]);
     const [newTask,setNewTask] = useState("");//for handleInputChange
+    const [inputsearch,setSearch] = useState("");
+    const [update,setUpdate] = useState(true)//change ui when click edit
+    const [updated,setUpdated] =useState("")
+    const [editId,setEditId] = useState("")
+
+
+    //use effect to diplsy all todos
     useEffect(()=>{
      Display();
     },[]);
@@ -16,6 +28,8 @@ function Todo()
     function handleInputChange(event){
       setNewTask(event.target.value)  
     }
+
+    //add a todo
     async function addTask(){
        try {
         if(newTask.trim() !== "") //trim() remove any white space
@@ -31,6 +45,8 @@ function Todo()
          alert(error.responce.data.error);
        }
     }
+    
+    //display all todos
     async function Display()
     {
        try {
@@ -41,6 +57,8 @@ function Todo()
        }
 
     }
+
+    //delete a todo
     async function deleteTask(ID){
        try {
         const response = await axios.delete(`http://localhost:4000/Task-delete/${ID}`);
@@ -50,6 +68,8 @@ function Todo()
         alert(error.response.data.error)
        }
     }
+
+    //move task up
     function moveUpTask(Index){
       
       if(Index > 0)
@@ -59,6 +79,8 @@ function Todo()
          setTask(updatedTask);
       }
     }
+
+    //move task down
     function moveDowmTask(Index){
         if(Index < Task.length - 1)
         {
@@ -67,6 +89,8 @@ function Todo()
           setTask(updatedtask)
         }
     }
+    
+   //change status of a todo
     async function ActionComplete(ID,newAction){
       try {
         const responce = await axios.post(`http://localhost:4000/Action/${ID}`,{action:newAction}) /*action mean Db schema */
@@ -77,24 +101,64 @@ function Todo()
       }
     }
 
+    //search function
+     async function search(event){
+       setSearch(event.target.value)
+       setSearch("");
+    }
+
+    //update function
+    async function Edit() {
+      const responce = await axios.post(`http://localhost:4000/edit/${editId}`,{work:updated})
+      try {
+        
+        alert(responce.data.message);
+        setUpdate(true);
+        Display();
+        setEditId("");
+        setUpdated("")
+        
+
+      } catch (error) {
+        alert(error.responce.data.error);
+      }
+    }
+
+    //updated input
+    function updatedIndex(event){
+      setUpdated(event.target.value)
+    }
+
+
     return(
         <div>
          <div className="nav"> <Navigation/></div>
          <div className="page-content">
-           <div>
+          {update?(
+            <div>
             <div className="fixed-input">
                 <input className="WriteTask" type="text" placeholder="Enter task..." value={newTask} onChange={handleInputChange}/>
                 <button className="add" onClick={addTask}>ADD</button>
             </div>
            
-
+              <input type="text" className="searchbar" placeholder="search.." value={inputsearch} onChange={search}/>
+              
             <div className="todo">
-              {/* .map() loops over each item in the Task array.*/}  
-               {Task.map((task,Index) =>
+                {/* task.work → The text of your task (e.g., "Buy vegetables").
+                   .toLowerCase() → Makes the text lowercase for case-insensitive searching.
+                   .includes(inputsearch.toLowerCase()) → Checks if the current task’s work contains the user's search text (inputsearch).*/}
+               {Task.filter(task =>task.work.toLowerCase().includes(inputsearch.toLocaleLowerCase()))
+               /* .map() loops over each item in the Task array.*/
+               .map((task,Index) =>
                   <li key={Index}>
                     <span className="display">{task.work}</span>{/*This accesses the Todo field inside your MongoDB document.*/}
-                    <button className="action-delete" onClick={()=> deleteTask(task._id)}>DELETE</button>
+                    
+                    <button className="editbtn" onClick={()=>{setUpdate(false),setEditId(task._id),setUpdated(task.work)}}><img className="editbtnicon" src={edit}  alt="edit"/></button>
+
+                    <button className="action-delete" onClick={()=> deleteTask(task._id)} ><img src={deleteico} alt="delete" className="deleteico"/></button>
+
                     <button className="action-up" onClick={() =>moveUpTask(Index)}>⬆️</button>
+
                     <button className="action-down" onClick={() =>moveDowmTask(Index)}>⬇️</button>
                     <div>
                       {task.action?(
@@ -111,6 +175,16 @@ function Todo()
                 )}
             </div>
            </div>
+          ):(
+                <div>
+                  <h1>Edit</h1>
+                <div className="form">
+                  <input type="text" className="updateinput" onChange={updatedIndex} value={updated}/>
+                  <button className="save" onClick={Edit}>Save</button>
+                </div>
+                </div>
+          )}  
+           
            
          </div>
            
