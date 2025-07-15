@@ -76,9 +76,7 @@ App.post('/Login',async (req,res)=>{
 
 })
 
-
 //Add task
-
 App.post('/Task',async(req,res) =>{
      const {work} = req.body;
   try {
@@ -116,6 +114,7 @@ App.delete('/Task-delete/:id',async (req,res) =>{
   }
 })
 
+//change status
 App.post('/Action/:id',async (req,res) =>{
   const {id} = req.params;
   const {action} = req.body;
@@ -125,5 +124,19 @@ App.post('/Action/:id',async (req,res) =>{
     res.status(200).json({message:"status changed..!"})
   } catch (error) {
     res.status(500).json({error:'mothing went wrong...!'})
+  }
+})
+
+//update task
+App.post('/edit/:id' ,async (req,res) =>{
+  const {id} = req.params;
+  const {work} = req.body;
+  try {
+      
+    await Tasks.findByIdAndUpdate(id,{work})
+    
+    res.status(200).json({message:'updated success..!'})
+  } catch (error) {
+    res.status(500).json({error:'something went wrong...!'})
   }
 })
