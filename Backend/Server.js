@@ -4,12 +4,15 @@ import mongoose from 'mongoose'
 import dotEnv from 'dotenv'
 import Users from './Module/Users.js'
 import Tasks from './Module/Tasks.js'
+import jwt from 'jsonwebtoken' 
+import  bcrypt from 'bcrypt'
+
 dotEnv.config()
 const App = express();
 
 const URL = process.env.URL;
 const PORT = process.env.PORT || 5000;
-
+const Secreat_key = process.env.jwt_Secret;
 App.use(cors());
 App.use(express.json());
 
@@ -45,10 +48,14 @@ App.post('/createAccount',async (req,res) =>{
       {
         return res.status(400).json({error:'Already have an account'})
       }
-      
-      const newUser = new Users({Email,Password});
-      await newUser.save();
-      res.status(201).json({message:'Account created successfully'})
+
+      const hashpassword = await bcrypt.hash(Password,10);  // 1).This 10 is called the salt rounds (cost factor). 2).It determines how many times the hashing process is applied internally. 3).10 is a reasonable and industry-standard default for secure, efficient hashing.
+      const newUser = new Users({Email,Password:hashpassword});
+        await newUser.save();
+      //                      payload        secreat key   expired time 
+      const token = jwt.sign({id:newUser._id},Secreat_key,{expiresIn:'48h'});
+    
+      res.status(201).json({message:'Account created successfully',token})
   } catch (error) {
     console.error(error);
     res.status(500).json({error:'Account creation faild'})
@@ -61,15 +68,26 @@ App.post('/Login',async (req,res)=>{
 
     const {Email,Password} = req.body;
   try {
-     const existing = await Users.findOne({Email,Password})
-
-   if(existing)
+    /* inside this  existing veriable it hold all user details
+    Ex:-
+       {
+       _id: ObjectId("66ab23a17f8c13c3e23b5f98"),
+        Email: "abc@gmail.com",
+       Password: "$2b$10$WqD2...hashedpassword...",
+      __v: 0
+      }
+    */
+     const existing = await Users.findOne({Email})
+     const hashpass = await bcrypt.compare(Password,existing.Password);
+   if(existing && hashpass)
    {
-    return res.status(200).json({message:'Login successfull'})
+      const token = jwt.sign({id:existing._id},Secreat_key,{expiresIn: '48h'});
+    return res.status(200).json({message:'Login successfull',token,user:{id:existing._id,Email:existing.Email}}) //purpose of send id and email is we can identify what user loged in
    }
    else{
-    return res.status(401).json({erro:'login unsuccesssfull'})
+      return res.status(200).json({message:'Login faild'})
    }
+    
   } catch (error) {
     res.status(500).json({error:'something went wrong'})
   }

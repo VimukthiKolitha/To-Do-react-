@@ -19,6 +19,8 @@ function Login() {
       try {
         const response = await axios.post('http://localhost:4000/Login',{Email:typeEmail,Password:typePass})
         alert(response.data.message);
+
+         localStorage.setItem('token',response.data.token)
          setTypeEmail('');
          setTypePass('');
          navigate('/Todo');
@@ -31,8 +33,9 @@ function Login() {
        try {
         const response = await axios.post('http://localhost:4000/createAccount',{Email:typeEmail,Password: typePass})
         alert(response.data.message);
-        setTypeEmail('');
-        setTypePass('');
+
+        localStorage.setItem('token',response.data.token)
+     
         setIsLogin(true)
 
        } catch (error) {
