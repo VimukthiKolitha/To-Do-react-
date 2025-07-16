@@ -7,7 +7,7 @@ function Navigation(){
       <div className='NavContainer'>
         <div className='element' onClick={() => navigate("/Todo")}>Home</div>
         <div className='element' onClick={() => navigate("/About")}>About US</div>
-        <div className='element' onClick={() => navigate("/")}>Create account</div>
+        <div className='element' onClick={() => navigate("/")}>Logout</div>
       </div>
     )
 }

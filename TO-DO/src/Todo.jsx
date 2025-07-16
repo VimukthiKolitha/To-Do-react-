@@ -140,7 +140,7 @@ function Todo()
                 <button className="add" onClick={addTask}>ADD</button>
             </div>
            
-              <input type="text" className="searchbar" placeholder="search.." value={inputsearch} onChange={search}/>
+              <input type="text" className="searchbar" placeholder="🔍" value={inputsearch} onChange={search}/>
               
             <div className="todo">
                 {/* task.work → The text of your task (e.g., "Buy vegetables").

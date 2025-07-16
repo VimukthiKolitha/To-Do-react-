@@ -119,7 +119,12 @@ li{
   width: 80px;
   height: 30px;
   background-color: yellow;
+  cursor: pointer;
  
+}
+.editbtn:hover{
+   background-color: white;
+   transform: translateY(4px);
 }
 .form{
     border-radius: 10px;
