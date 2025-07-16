@@ -13,6 +13,9 @@ install
 2.cors (npm i cors)
 3.mongoose (npm i mongoose)
 4.dotenv (npm i dorenv)
+5.npm i bycrypt
+6.npm i jsonwebtoken
+7.npm i nodemon
 
-command to run
-npm start server
+command to run backend
+npm run dev
