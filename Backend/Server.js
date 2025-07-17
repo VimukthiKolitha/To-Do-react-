@@ -63,7 +63,6 @@ App.post('/createAccount',async (req,res) =>{
 })
 
 //Api for Login
-
 App.post('/Login',async (req,res)=>{
 
     const {Email,Password} = req.body;
@@ -97,8 +96,10 @@ App.post('/Login',async (req,res)=>{
 //Add task
 App.post('/Task',async(req,res) =>{
      const {work} = req.body;
+     const {userId} = req.body;
   try {
-      const newTask = new Tasks({work});
+    
+      const newTask = new Tasks({work,userId});
       await newTask.save();
 
       res.status(200).json({message:'Task added success..!'})
@@ -108,11 +109,12 @@ App.post('/Task',async(req,res) =>{
 })
 
 //displsy task
-
-App.get('/display',async(req,res) =>{
+App.get('/display/:id',async(req,res) =>{
+     
+       const {id} = req.params; 
   try {
-      const list =  await Tasks.find()
-
+     
+      const list =  await Tasks.find({userId:id})
       res.status(200).json({list});
   } catch (error) {
      res.status(500).json({error:'something went wrong..!'})

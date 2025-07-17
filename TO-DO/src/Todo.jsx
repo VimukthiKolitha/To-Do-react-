@@ -29,20 +29,42 @@ function Todo()
       setNewTask(event.target.value)  
     }
 
+
+    //from chat GPT
+    function parseJWT(token) {
+    try {
+        const base64Url = token.split('.')[1]; // get payload
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+
+        return JSON.parse(jsonPayload);
+    } catch (e) {
+        console.error("Error decoding token:", e);
+        return null;
+    }
+}
+
     //add a todo
     async function addTask(){
        try {
         if(newTask.trim() !== "") //trim() remove any white space
        {
-         const responce = await axios.post('http://localhost:4000/Task',{work:newTask}); //work mean db schema
+       
+        const token = localStorage.getItem('token')
+       console.log("Token from localStorage:", token);
+      const decord = parseJWT(token);
+      console.log("Decoded token object:", decord); 
+
+        const response = await axios.post(`http://localhost:4000/Task`,{work:newTask,userId:decord.id}); //work mean db schema
+
+         alert(response.data.message);
          setNewTask("");
-         alert(responce.data.message);
          Display();
        }
-       else{
-       }
        } catch (error) {
-         alert(error.responce.data.error);
+         alert(error.response.data.error);
        }
     }
     
@@ -50,10 +72,14 @@ function Todo()
     async function Display()
     {
        try {
-        const responce = await axios.get('http://localhost:4000/display');
-        setTask(responce.data.list);
+         const token =  localStorage.getItem('token')
+         const decord = parseJWT(token);
+         const id = decord.id
+         const response = await axios.get(`http://localhost:4000/display/${id}`);
+
+        setTask(response.data.list || 'no tasks');
        } catch (error) {
-        alert(error.responce.data.error);
+        alert(error.response.data.error || 'something went wrong');
        }
 
     }
