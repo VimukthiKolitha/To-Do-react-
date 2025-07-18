@@ -6,7 +6,7 @@ import Users from './Module/Users.js'
 import Tasks from './Module/Tasks.js'
 import jwt from 'jsonwebtoken' 
 import  bcrypt from 'bcrypt'
-
+import {verify} from './middleware/auth.js'
 dotEnv.config()
 const App = express();
 
@@ -22,7 +22,7 @@ const connectDB = async() =>{
         await mongoose.connect(URL);
         console.log("mongoDB connection success..!")
     } catch (error) {
-         console.log("connection fail :(")
+         console.log(`connection fail :${error}`)
     }
 }
 
@@ -33,7 +33,7 @@ connectDB().then(()=>{
      console.log(`DB connected via ${PORT}`)
 
    } catch (error) {
-     console.log("Port failure...");
+     console.log(`Port failed:${error}`);
    }
 })
 
@@ -58,7 +58,7 @@ App.post('/createAccount',async (req,res) =>{
       res.status(201).json({message:'Account created successfully',token})
   } catch (error) {
     console.error(error);
-    res.status(500).json({error:'Account creation faild'})
+    res.status(500).json({error:`Account creation faild:${error}`})
   }
 })
 
@@ -88,15 +88,17 @@ App.post('/Login',async (req,res)=>{
    }
     
   } catch (error) {
-    res.status(500).json({error:'something went wrong'})
+    res.status(500).json({error:`something went wrong ${error}`})
   }
 
 })
 
 //Add task
-App.post('/Task',async(req,res) =>{
+App.post('/Task',verify,async(req,res) =>{
      const {work} = req.body;
-     const {userId} = req.body;
+     const userId = req.user.id; // retrieved from decoded token
+
+    
   try {
     
       const newTask = new Tasks({work,userId});
@@ -104,38 +106,39 @@ App.post('/Task',async(req,res) =>{
 
       res.status(200).json({message:'Task added success..!'})
   } catch (error) {
-     res.status(500).json({error:'something went wrong..!'})
+     res.status(500).json({error:`something went wrong:${error}`})
   }
 })
 
 //displsy task
-App.get('/display/:id',async(req,res) =>{
+App.get('/display',verify,async(req,res) =>{
      
-       const {id} = req.params; 
+       const id = req.user.id; 
+       
   try {
      
-      const list =  await Tasks.find({userId:id})
+      const list =  await Tasks.find({userId:id}) 
       res.status(200).json({list});
   } catch (error) {
-     res.status(500).json({error:'something went wrong..!'})
+     res.status(500).json({error:`something went wrong:${error}`})
   }
 })
 
 //delete task
 
-App.delete('/Task-delete/:id',async (req,res) =>{
+App.delete('/Task-delete/:id',verify,async (req,res) =>{
       const {id} = req.params;
+      
   try {
       await Tasks.findByIdAndDelete(id)
-
       res.status(200).json({message:"Delete successfull..!"})
   } catch (error) {
-    res.status(500).json({error:'something went wrong'})
+    res.status(500).json({error:`something went wrong`})
   }
 })
 
 //change status
-App.post('/Action/:id',async (req,res) =>{
+App.post('/Action/:id',verify,async (req,res) =>{
   const {id} = req.params;
   const {action} = req.body;
   try {
@@ -143,20 +146,21 @@ App.post('/Action/:id',async (req,res) =>{
 
     res.status(200).json({message:"status changed..!"})
   } catch (error) {
-    res.status(500).json({error:'mothing went wrong...!'})
+    res.status(500).json({error:`mothing went wrong:${error}`})
   }
 })
 
 //update task
-App.post('/edit/:id' ,async (req,res) =>{
+App.post('/edit/:id',verify,async (req,res) =>{
   const {id} = req.params;
   const {work} = req.body;
+  
   try {
       
     await Tasks.findByIdAndUpdate(id,{work})
     
     res.status(200).json({message:'updated success..!'})
   } catch (error) {
-    res.status(500).json({error:'something went wrong...!'})
+    res.status(500).json({error:`something went wrong:${error}`})
   }
 })

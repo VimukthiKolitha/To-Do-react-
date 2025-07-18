@@ -30,22 +30,6 @@ function Todo()
     }
 
 
-    //from chat GPT
-    function parseJWT(token) {
-    try {
-        const base64Url = token.split('.')[1]; // get payload
-        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-        }).join(''));
-
-        return JSON.parse(jsonPayload);
-    } catch (e) {
-        console.error("Error decoding token:", e);
-        return null;
-    }
-}
-
     //add a todo
     async function addTask(){
        try {
@@ -54,10 +38,8 @@ function Todo()
        
         const token = localStorage.getItem('token')
        console.log("Token from localStorage:", token);
-      const decord = parseJWT(token);
-      console.log("Decoded token object:", decord); 
 
-        const response = await axios.post(`http://localhost:4000/Task`,{work:newTask,userId:decord.id}); //work mean db schema
+        const response = await axios.post(`http://localhost:4000/Task`,{work:newTask},{headers:{Authorization:`Bearer ${token}`}}); //work mean db schema
 
          alert(response.data.message);
          setNewTask("");
@@ -73,13 +55,12 @@ function Todo()
     {
        try {
          const token =  localStorage.getItem('token')
-         const decord = parseJWT(token);
-         const id = decord.id
-         const response = await axios.get(`http://localhost:4000/display/${id}`);
+         
+         const response = await axios.get(`http://localhost:4000/display`,{headers:{Authorization:`Bearer ${token}`}});
 
-        setTask(response.data.list || 'no tasks');
+        setTask(response.data.list);
        } catch (error) {
-        alert(error.response.data.error || 'something went wrong');
+        alert(error.response.data.error);
        }
 
     }
@@ -87,8 +68,10 @@ function Todo()
     //delete a todo
     async function deleteTask(ID){
        try {
-        const response = await axios.delete(`http://localhost:4000/Task-delete/${ID}`);
-        alert( response.data.message)
+        const token = localStorage.getItem('token');
+        const response = await axios.delete(`http://localhost:4000/Task-delete/${ID}`,{headers:{Authorization:`Bearer ${token}`}});
+       
+        alert(response.data.message)
         Display();
        } catch (error) {
         alert(error.response.data.error)
@@ -119,7 +102,8 @@ function Todo()
    //change status of a todo
     async function ActionComplete(ID,newAction){
       try {
-        const responce = await axios.post(`http://localhost:4000/Action/${ID}`,{action:newAction}) /*action mean Db schema */
+        const token = localStorage.getItem('token');
+        const responce = await axios.post(`http://localhost:4000/Action/${ID}`,{action:newAction},{headers:{Authorization:`Bearer ${token}`}}) /*action mean Db schema */
         alert(responce.data.message)
         Display();
       } catch (error) {
@@ -134,7 +118,9 @@ function Todo()
 
     //update function
     async function Edit() {
-      const responce = await axios.post(`http://localhost:4000/edit/${editId}`,{work:updated})
+
+      const token = localStorage.getItem('token');
+      const responce = await axios.post(`http://localhost:4000/edit/${editId}`,{work:updated},{headers:{Authorization:`Bearer ${token}`}})
       try {
         
         alert(responce.data.message);
