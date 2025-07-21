@@ -84,7 +84,7 @@ App.post('/Login',async (req,res)=>{
     return res.status(200).json({message:'Login successfull',token,user:{id:existing._id,Email:existing.Email}}) //purpose of send id and email is we can identify what user loged in
    }
    else{
-      return res.status(200).json({message:'Login faild'})
+      return res.status(401).json({error:'Login faild'})
    }
     
   } catch (error) {

@@ -6,12 +6,6 @@
     z-index: 1000;
     margin-bottom: 20px;
 }
-.todo{
-   margin-top: 0px;
-   margin-right: 750px;
-   margin-left: 10px;
-   animation: drop 1s ease-out forwards;
-}
 button{
     border-radius: 10px;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
@@ -43,16 +37,6 @@ button{
    font-size: large;
    font-family:'Courier New', Courier, monospace ;
    margin-bottom: 40px;
-}
-li{
-    list-style: none;
-    display: flex;
-    align-items: center;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    border-bottom: 1px solid gray;
-    padding-bottom: 5px;
-
 }
 .action-delete{
   margin-bottom: 10px;
@@ -100,7 +84,7 @@ li{
    left: 0px;
 }
 .searchbar{
-    position: absolute;
+    position: fixed;
     right: 30px;
     top: 60px;
     width: 300px;
@@ -145,6 +129,25 @@ li{
     background-color: white;
     transform: translateY(4px);
 }
+.scroll-box{
+  
+  padding: 5px;
+  width: 500px;
+  height: 300px;
+  aspect-ratio: 1;
+  border: solid black 2px;
+  overflow: scroll;
+  overflow-anchor: none;
+}
+.todo-list{
+    flex-direction: column;
+}
+.list-container
+{
+    padding: 8px;
+    border: 2px solid rgb(21, 92, 3);
+    border-radius: 5px;
+}
 @keyframes drop{
     0%{
         opacity: 0;
@@ -177,5 +180,13 @@ li{
     }
     100%{
         box-shadow: 0 0  20px red;
+    }
+}
+
+@media (max-width:600px) {
+    .button-box{
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
     }
 }

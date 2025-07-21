@@ -147,45 +147,63 @@ function Todo()
          <div className="page-content">
           {update?(
             <div>
+              
             <div className="fixed-input">
                 <input className="WriteTask" type="text" placeholder="Enter task..." value={newTask} onChange={handleInputChange}/>
                 <button className="add" onClick={addTask}>ADD</button>
             </div>
-           
-              <input type="text" className="searchbar" placeholder="🔍" value={inputsearch} onChange={search}/>
-              
-            <div className="todo">
+             <div className="search-container">
+                <input type="text" className="searchbar" placeholder="🔍" value={inputsearch} onChange={search}/>
+             </div>
+      
+   
                 {/* task.work → The text of your task (e.g., "Buy vegetables").
                    .toLowerCase() → Makes the text lowercase for case-insensitive searching.
                    .includes(inputsearch.toLowerCase()) → Checks if the current task’s work contains the user's search text (inputsearch).*/}
-               {Task.filter(task =>task.work.toLowerCase().includes(inputsearch.toLocaleLowerCase()))
+
+             <div className="scroll-box">
+                {Task.filter(task =>task.work.toLowerCase().includes(inputsearch.toLocaleLowerCase()))
                /* .map() loops over each item in the Task array.*/
+               
+               
                .map((task,Index) =>
                   <li key={Index}>
-                    <span className="display">{task.work}</span>{/*This accesses the Todo field inside your MongoDB document.*/}
-                    
-                    <button className="editbtn" onClick={()=>{setUpdate(false),setEditId(task._id),setUpdated(task.work)}}><img className="editbtnicon" src={edit}  alt="edit"/></button>
+                 
+                  <div className="button-box">
+                    <div className="list-container">
+                      <div className="todo-list">
+                         <span className="display">{task.work}</span>{/*This accesses the Todo field inside your MongoDB document.*/}
+                      </div>
+                      
+                  
+                  
+                      <button className="editbtn" onClick={()=>{setUpdate(false),setEditId(task._id),setUpdated(task.work)}}><img className="editbtnicon" src={edit}  alt="edit"/></button>
 
                     <button className="action-delete" onClick={()=> deleteTask(task._id)} ><img src={deleteico} alt="delete" className="deleteico"/></button>
 
                     <button className="action-up" onClick={() =>moveUpTask(Index)}>⬆️</button>
 
                     <button className="action-down" onClick={() =>moveDowmTask(Index)}>⬇️</button>
-                    <div>
+                  
                       {task.action?(
                        <button className="action-down" onClick={() =>ActionComplete(task._id,false)}>⛔ todo</button>
                       ):(
                        <button className="action-down" onClick={() =>ActionComplete(task._id,true)}>✅ done</button>
                       )  
                     }
-                    </div>
+              
+                  
+                    </div>  
+                    </div>  
                     {/* Here, deleteTask is a function reference.this is not call immediately this work only when you click button*/}
                     {/*onClick = {deleteTask(Index)}  this is immediate.its work even without clicking button.here we are calling to function not function refference*/}
                     {/* onClick={() =>moveDowmTask(Index)}  using arrow function we can easily prevent problem */}
                   </li>
                 )}
             </div>
-           </div>
+            
+              </div>      
+             
           ):(
                 <div>
                   <h1>Edit</h1>
