@@ -45,10 +45,11 @@ function Login() {
 
     return(
         <div className="container">
+          <header><meta name="viewport" content="width=device-width, initial-scale=1.0"/></header>
           { isLogin ?(
             <div className="Form">
             <h1 className="topic">Login</h1>
-            <div></div>
+            
              <input className="Input" type="email" value={typeEmail} placeholder="Entert Email" onChange={onTypeEmail}/><br/>
              <input className="Input" type="password" value={typePass} placeholder="Enter password" onChange={onTypePass}/><br/>
              <button onClick={Login} className="button">Login</button><br/>
