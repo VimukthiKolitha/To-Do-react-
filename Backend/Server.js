@@ -133,7 +133,7 @@ App.delete('/Task-delete/:id',verify,async (req,res) =>{
       await Tasks.findByIdAndDelete(id)
       res.status(200).json({message:"Delete successfull..!"})
   } catch (error) {
-    res.status(500).json({error:`something went wrong`})
+      res.status(500).json({error:`something went wrong`})
   }
 })
 

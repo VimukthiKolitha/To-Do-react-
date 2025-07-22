@@ -16,7 +16,7 @@ function Todo()
     const [update,setUpdate] = useState(true)//change ui when click edit
     const [updated,setUpdated] =useState("")
     const [editId,setEditId] = useState("")
-
+  
 
     //use effect to diplsy all todos
     useEffect(()=>{
@@ -67,6 +67,12 @@ function Todo()
 
     //delete a todo
     async function deleteTask(ID){
+
+      const confirm = window.confirm("Are you sure you want to delete?")
+      if(!confirm)
+      {
+        return;
+      }
        try {
         const token = localStorage.getItem('token');
         const response = await axios.delete(`http://localhost:4000/Task-delete/${ID}`,{headers:{Authorization:`Bearer ${token}`}});
@@ -139,7 +145,7 @@ function Todo()
     function updatedIndex(event){
       setUpdated(event.target.value)
     }
-
+  
 
     return(
         <div>
@@ -152,11 +158,11 @@ function Todo()
                 <input className="WriteTask" type="text" placeholder="Enter task..." value={newTask} onChange={handleInputChange}/>
                 <button className="add" onClick={addTask}>ADD</button>
             </div>
+
              <div className="search-container">
                 <input type="text" className="searchbar" placeholder="🔍" value={inputsearch} onChange={search}/>
-             </div>
-      
-   
+                </div>
+             
                 {/* task.work → The text of your task (e.g., "Buy vegetables").
                    .toLowerCase() → Makes the text lowercase for case-insensitive searching.
                    .includes(inputsearch.toLowerCase()) → Checks if the current task’s work contains the user's search text (inputsearch).*/}
